@@ -233,3 +233,20 @@ if (COMB_ENABLE_ADIAK)
                        LIBRARIES adiak
                        DEFINES USE_ADIAK)
 endif()
+
+if (COMB_ENABLE_DMV) 
+  find_package(dmv REQUIRED)
+
+  if (DMV_FOUND)
+    message(STATUS "DMV Enabled")
+    message(STATUS "DMV Path:     ${DMV_INCLUDE_PATH}")
+  else()
+    message(FATAL_ERROR "DMV NOT FOUND")
+  endif()
+
+  # register dmv with blt
+  blt_register_library(NAME DMV
+                        INCLUDES ${DMV_INCLUDE_PATH}
+                        LIBRARIES dmv
+                        DEFINES USE_DMV)
+endif()

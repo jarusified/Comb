@@ -31,4 +31,4 @@ cmake \
   -DENABLE_CUDA=OFF \
   -DCMAKE_INSTALL_PREFIX=../install_${BUILD_SUFFIX} \
   "$@" \
-  ..
+  ../..

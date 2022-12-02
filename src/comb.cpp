@@ -39,6 +39,10 @@
 #include <adiak.hpp>
 #endif
 
+#ifndef COMB_ENABLE_DMV
+#include <libdmv.h>
+#endif
+
 int main(int argc, char** argv)
 {
 #ifdef COMB_ENABLE_MPI
