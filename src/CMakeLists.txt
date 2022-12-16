@@ -212,11 +212,15 @@ if (COMB_ENABLE_RAJA)
 endif()
 
 if (COMB_ENABLE_CALIPER)
-  list(APPEND comb_depends Caliper)
-endif()
+  set(comb_depends ${comb_depends} Caliper)
+endif() 
 
 if (COMB_ENABLE_ADIAK)
-  list(APPEND comb_depends Adiak)
+  set(comb_depends ${comb_depends} Adiak)
+endif()
+
+if (COMB_ENABLE_DMV) 
+  set(comb_depends ${comb_depends} dmv cupti nvidia-ml)
 endif()
 
 blt_add_executable(
@@ -224,8 +228,12 @@ blt_add_executable(
   SOURCES ${comb_sources}
   DEPENDS_ON ${comb_depends} ${CMAKE_DL_LIBS})
 
+message(STATUS ${comb_depends})
+
 target_include_directories(comb
   PUBLIC
+  ${DMV_INCLUDE_PATH}
+  ${FMT_INCLUDE_PATH}
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:include>)

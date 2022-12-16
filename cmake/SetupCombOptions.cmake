@@ -24,7 +24,7 @@ set(COMB_ENABLE_UMR Off CACHE BOOL "Build UMR support")
 set(COMB_ENABLE_RAJA ON CACHE BOOL "Build RAJA support")
 set(COMB_ENABLE_CALIPER Off CACHE BOOL "Build Caliper support")
 set(COMB_ENABLE_ADIAK Off CACHE BOOL "Build Adiak support")
-set(COMB_ENABLE_DMV Off CACHE BOOL "Build DMV support")
+set(COMB_ENABLE_DMV Off CACHE BOOL "Build DMV support") 
 
 option(COMB_ENABLE_LOG "Build logging support" Off)
 
