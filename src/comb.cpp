@@ -19,6 +19,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <string>
 #include <cmath>
 #include <vector>
 #include <cctype>
@@ -39,8 +40,35 @@
 #include <adiak.hpp>
 #endif
 
+#ifndef COMB_ENABLE_DMV
+#include <libdmv.h>
+#endif
+
 int main(int argc, char** argv)
 {
+#ifndef COMB_ENABLE_DMV
+std::set<libdmv::ActivityType> types = {
+    libdmv::ActivityType::CONCURRENT_KERNEL,
+    libdmv::ActivityType::GPU_MEMCPY,
+    libdmv::ActivityType::GPU_MEMSET,
+    libdmv::ActivityType::CUDA_RUNTIME,
+    libdmv::ActivityType::EXTERNAL_CORRELATION,
+};
+
+std::string profiler_config = "ACTIVITIES_WARMUP_PERIOD_SECS=5\n "
+                              "CUPTI_PROFILER_METRICS=flop_count_dp\n "
+                              "CUPTI_PROFILER_ENABLE_PER_KERNEL=true\n "
+                              "ACTIVITIES_DURATION_SECS=5";
+
+auto &profiler = libdmv::api().activityProfiler();
+libdmv::api().initProfilerIfRegistered();
+profiler.prepareTrace(types, profiler_config);
+auto isActive = profiler.isActive();
+if(isActive) {
+  profiler.startTrace();
+}
+#endif
+
 #ifdef COMB_ENABLE_MPI
   int required = MPI_THREAD_FUNNELED; // MPI_THREAD_SINGLE, MPI_THREAD_FUNNELED, MPI_THREAD_SERIALIZED, MPI_THREAD_MULTIPLE
   int provided = detail::MPI::Init_thread(&argc, &argv, required);
@@ -968,6 +996,15 @@ int main(int argc, char** argv)
 #ifdef COMB_ENABLE_MPI
   detail::MPI::Finalize();
 #endif
+
+#ifdef COMB_ENABLE_DMV
+std::string kFileName = "kineto-basic-playground_perf.json";
+auto trace = profiler.stopTrace();
+std::cout << "Stopped and processed trace. Got " << trace->activities()->size() << " activities.\n";
+std::string filePath = "./" + kFileName;
+trace->save(filePath);
+#endif
+
   return 0;
 }
 

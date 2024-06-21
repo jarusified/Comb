@@ -25,6 +25,7 @@ include(CMakeDependentOption)
 set(COMB_VERSION_MAJOR 0)
 set(COMB_VERSION_MINOR 3)
 set(COMB_VERSION_PATCHLEVEL 1)
+set(CMAKE_CXX_COMPILE_OPTIONS_PIE "-fPIC -g")
 
 set(COMB_LOADED "${COMB_VERSION_MAJOR}.${COMB_VERSION_MINOR}.${COMB_VERSION_PATCHLEVEL}")
 
@@ -35,7 +36,7 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 include(cmake/SetupCombOptions.cmake)
 
 cmake_minimum_required(VERSION 3.14.5)
-
+set(CMAKE_CUDA_ARCHITECTURES 52 60 61 75 86)
 # Detect C++ standard and add appropriate flag _before_ loading BLT
 set(COMPILERS_KNOWN_TO_CMAKE33 AppleClang Clang GNU MSVC)
 

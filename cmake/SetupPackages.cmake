@@ -233,3 +233,26 @@ if (COMB_ENABLE_ADIAK)
                        LIBRARIES adiak
                        DEFINES USE_ADIAK)
 endif()
+
+if (COMB_ENABLE_DMV)
+  find_package(dmv REQUIRED)
+
+  message(STATUS "libfmt path: ${FMT_SOURCE_DIR}")
+  set(FMT_INCLUDE_PATH "${FMT_SOURCE_DIR}/include")
+  set(DMV_INCLUDE_PATH "${DMV_SOURCE_DIR}/include")
+
+  if (DMV_FOUND)
+    message(STATUS "DMV Enabled")
+    message(STATUS "DMV include path:     ${DMV_INCLUDE_PATH}")
+  else()
+    message(FATAL_ERROR "DMV NOT FOUND")
+  endif()
+
+  # register dmv with blt
+  blt_register_library(NAME dmv
+                        INCLUDES ${DMV_INCLUDE_PATH} ${FMT_INCLUDE_PATH}
+                        LIBRARIES ${DMV_CXX_LIBRARIES}
+                        COMPILE_FLAGS ${DMV_CXX_COMPILE_FLAGS}
+                        LINK_FLAGS    ${DMV_CXX_LINK_FLAGS}
+                        DEFINES USE_DMV)
+endif()
